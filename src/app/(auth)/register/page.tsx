@@ -16,7 +16,7 @@ export default function RegisterPage() {
       await registerBusiness({ email: data.email, name: data.name, businessName: data.businessName, password: data.password, role: userRole });
       const user = authUser()?.user;
       if (user) {
-        router.push('/dashboard');
+        router.push(`/dashboard/${user?.slug}`);
       }
     } catch (err: any) {
       setError(err.message || 'Registration failed')

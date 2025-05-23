@@ -5,6 +5,7 @@ import BookForm from '@/components/books/BookForm'
 import { uploadBook } from '@/lib/api/books'
 import { useRouter } from 'next/navigation'
 import { Book } from '@/types/book'
+import { ArrowLeftCircle } from 'lucide-react'
 
 export default function UploadBookPage() {
   const router = useRouter()
@@ -37,7 +38,11 @@ export default function UploadBookPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Upload New Book</h1>
+      <div className="flex">
+        <ArrowLeftCircle onClick={() => router.back()} size={40} className='mx-4 hover:cursor-pointer'/>
+        <h1 className="text-2xl font-bold mb-4">Upload New Book</h1>
+        </div>
+      
       <BookForm book={book} onSubmit={handleUpload} loading={loading} />
     </div>
   )

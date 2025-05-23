@@ -36,7 +36,7 @@ export default function BookDetails({ book }: any) {
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <ArrowLeftCircleIcon className='w-5 h-5 hover:cursor-pointer' onClick={() => router.back()}/>
+      <ArrowLeftCircleIcon size={40} className='mb-2 hover:cursor-pointer' onClick={() => router.back()}/>
       <div className="flex flex-col md:flex-row gap-6">
         <img
           src={book?.data?.url}
@@ -66,7 +66,7 @@ export default function BookDetails({ book }: any) {
         </div>
         {loggedInUser?.role === "content_manager" && (
           <div 
-            className='p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
+            className='bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 rounded p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
             onClick={() => router.push(`/books/${book?.data?._id}/edit`)}>
               Edit book
           </div>

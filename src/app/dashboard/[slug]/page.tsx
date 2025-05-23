@@ -9,7 +9,7 @@ import BookCard from '@/components/books/BookCard'
 import LoadingSpinner from '@/components/common/Spinner'
 import { BookOpenText, Settings, UploadCloud, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
