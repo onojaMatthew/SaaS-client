@@ -20,8 +20,8 @@ export const getBookById = async (id: string): Promise<Book> => {
 
 export const updateBook = async (id: string, data: Book): Promise<Book> => {
  
-  const res = await fetch(`${API_BASE_URL}/contents/${id}`, {
-    method: 'GET',
+  const res = await fetch(`${API_BASE_URL}/contents/${id}/update`, {
+    method: 'PUT',
     headers: {
       "Content-Type": "application/json",
       "authorization": `Bearer ${token}`

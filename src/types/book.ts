@@ -8,4 +8,5 @@ export type Book = {
   uploadedAt: string
   uploaderId: string
   averageRating: number
+  textContent: string
 }

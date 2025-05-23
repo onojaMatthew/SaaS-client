@@ -14,7 +14,8 @@ export default function LoginPage() {
     try {
       await loginUser({ email, password })
       const isLoggedIn: any = authUser()
-      if (isLoggedIn && isLoggedIn.business) {
+      console.log(isLoggedIn, " the login details")
+      if (isLoggedIn && isLoggedIn.user && isLoggedIn?.user.role === "content_manager") {
         router.push('/dashboard');
       } else {
         router.push("/admin/login")

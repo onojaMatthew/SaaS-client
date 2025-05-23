@@ -15,8 +15,8 @@ export default function EditBookPage() {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const data = await getBookById(id as string)
-        setBook(data)
+        const data: any = await getBookById(id as string)
+        setBook(data?.data)
       } catch (err) {
         console.error(err)
       } finally {
@@ -40,7 +40,7 @@ export default function EditBookPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Edit Book</h1>
-      <BookForm onSubmit={handleUpdate} />
+      <BookForm book={book} onSubmit={handleUpdate} />
     </div>
   )
 }

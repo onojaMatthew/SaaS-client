@@ -3,15 +3,20 @@
 import { useEffect, useState } from 'react';
 import { Book } from '@/types/book'
 import { rateBook } from '@/lib/api/books'
+import { useRouter } from 'next/navigation';
 import { RatingStars } from './RatingStars'
+import { ArrowLeft, ArrowLeftCircleIcon } from 'lucide-react';
+import { authUser } from '@/lib/utils';
 
 type Props = {
   book: Book
 }
 
 export default function BookDetails({ book }: any) {
-  const [userRating, setUserRating] = useState<number | null>(null)
-  console.log(book, " the book")
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const router = useRouter();
+  const loggedInUser = authUser()?.user;
+
   useEffect(() => {
     // Optional: fetch user's existing rating if needed
     const stored = localStorage.getItem(`book-rating-${book?.data?._id}`)
@@ -31,6 +36,7 @@ export default function BookDetails({ book }: any) {
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <ArrowLeftCircleIcon className='w-5 h-5 hover:cursor-pointer' onClick={() => router.back()}/>
       <div className="flex flex-col md:flex-row gap-6">
         <img
           src={book?.data?.url}
@@ -46,16 +52,26 @@ export default function BookDetails({ book }: any) {
         </div>
       </div>
      
-      <div className="mt-4">
-        <p className="font-medium text-gray-700 mb-1">Rate this book:</p>
-        <RatingStars
-          rating={book?.data?.averageRating ?? 0}
-          userRating={userRating ?? undefined}
-          onRate={(value) => {
-            setUserRating(value)
-            rateBook(book?.data?._id, value)
-          }}
-        />
+      <div className="mt-4 flex justify-between">
+        <div>
+          <p className="font-medium text-gray-700 mb-1">Rate this book:</p>
+          <RatingStars
+            rating={book?.data?.averageRating ?? 0}
+            userRating={userRating ?? undefined}
+            onRate={(value) => {
+              setUserRating(value)
+              rateBook(book?.data?._id, value)
+            }}
+          />
+        </div>
+        {loggedInUser?.role === "content_manager" && (
+          <div 
+            className='p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
+            onClick={() => router.push(`/books/${book?.data?._id}/edit`)}>
+              Edit book
+          </div>
+        )}
+        
       </div>
 
     </div>

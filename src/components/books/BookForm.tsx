@@ -1,21 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Input } from '../ui/input'
+import { usePathname } from 'next/navigation'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
-import { Select } from '../common/Select'
 import LoadingSpinner from '../common/Spinner'
+import { Book } from '@/types/book'
 
 type Props = {
   onSubmit: (formData: FormData) => void
   loading?: boolean
+  book: Book
 }
 
-export default function BookForm({ onSubmit, loading }: Props) {
-  const { register, handleSubmit, watch, formState: { errors} } = useForm({
+export default function BookForm({ onSubmit, loading, book }: Props) {
+  const pathname = usePathname();
+  const { register, reset, handleSubmit, formState: { errors} } = useForm({
     defaultValues: {
       title: "",
       author: "",
@@ -25,7 +28,22 @@ export default function BookForm({ onSubmit, loading }: Props) {
       textContent: ""
     }
   });
+
+  
+  useEffect(() => {
+    if (book) {
+      reset({
+        title: book?.title,
+        author: book?.author,
+        description: book?.description,
+        genre: book?.category,
+        url: book.url,
+        textContent: book.textContent,
+      });
+    }
+  }, [book, reset]);
  
+  const action = pathname.split("/")[3];
   const genres = [
     { label: 'Fantasy', value: 'fantasy' },
     { label: 'Science Fiction', value: 'science fiction' },
@@ -94,7 +112,7 @@ export default function BookForm({ onSubmit, loading }: Props) {
         {errors.url && <p className="text-red-500 text-sm">{errors?.url?.message}</p>}
       </div>
       <Button className='w-full' type="submit" disabled={loading}> 
-        {loading ? <LoadingSpinner /> : 'Upload Book'}
+        {loading ? <LoadingSpinner /> : action ==="edit" ? "Edit Book" : 'Upload Book' }
       </Button>
     </form>
   )
