@@ -7,7 +7,7 @@ import { RatingStars } from './RatingStars'
 import { ArrowLeftCircleIcon } from 'lucide-react';
 import { authUser } from '@/lib/utils';
 import {  useAppDispatch } from '@/types/storeTypes';
-import { rateBook } from '@/store/bookSlice';
+import { deleteBook, rateBook } from '@/store/bookSlice';
 import { logInteraction } from '@/store/recommendationSlice';
 
 type Props = {
@@ -41,6 +41,10 @@ export default function BookDetails({ book }: any) {
     dispatch(logInteraction({ contentId: book?._id, interactionType: "view" }))
   }, [])
 
+  const handleDelete = (id: string) => {
+    dispatch(deleteBook(id));
+  }
+
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
       <ArrowLeftCircleIcon size={40} className='mb-2 hover:cursor-pointer' onClick={() => router.back()}/>
@@ -72,11 +76,19 @@ export default function BookDetails({ book }: any) {
           />
         </div>
         {loggedInUser?.role === "content_manager" && loggedInUser?.businessId?.toString() === book?.businessId?.toString() && (
-          <div 
-            className='bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 rounded p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
-            onClick={() => router.push(`/books/${book?._id}/edit`)}>
-              Edit book
+          <div className='flex'>
+            <div 
+              className='bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 rounded p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
+              onClick={() => router.push(`/books/${book?._id}/edit`)}>
+                Edit book
+            </div>
+            <div
+              className='bg-red-600 text-white hover:bg-red-700 focus:ring-blue-red rounded p-2 hover:cursor-pointer shadow flex justify-center items-center gb-red-500' 
+              onClick={() => handleDelete(book?._id)}>
+                Delete book
+            </div>  
           </div>
+          
         )}
         
       </div>

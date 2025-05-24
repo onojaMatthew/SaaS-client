@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Book, BookPayload, BookResponse } from '@/types/book';
 import { authUser } from '@/lib/utils';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const user = authUser();
 const businessId = user?.user?.businessId;
@@ -15,6 +15,7 @@ interface InitialState {
   success: boolean;
   uploadSuccess: boolean;
   error: string | null;
+  deleteLoading: boolean;
 }
 
 const initialState: InitialState = {
@@ -24,6 +25,7 @@ const initialState: InitialState = {
   uploadSuccess: false,
   success: false,
   error: null,
+  deleteLoading: false, 
 };
 
 const bookSlice = createSlice({
@@ -121,6 +123,21 @@ const bookSlice = createSlice({
           state.loading = false;
           state.error = action.payload.message;
           state.uploadSuccess = false;
+        }
+        
+      })
+      .addCase(deleteBook.pending, (state) => {
+        state.deleteLoading = true;
+      })
+      .addCase(deleteBook.fulfilled, (state, action) => {
+        if (action.payload.success) {
+          state.loading = false;
+          state.deleteLoading = true;
+          state.books = state.books.filter((book: Book) => book._id === action.payload.data._id);
+        } else {
+          state.loading = false;
+          state.error = action.payload.message;
+          state.deleteLoading = false;
         }
         
       })
@@ -253,6 +270,32 @@ export const getUserUploadedBooks = createAsyncThunk<BookResponse, void, { rejec
           "Content-Type": "application/json",
           "authorization": `Bearer ${token}`
         },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return rejectWithValue(error.message || 'Failed to fetch book');
+      }
+
+      const resp: BookResponse = await response.json();
+      return resp;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Login failed');
+    }
+  }
+);
+
+export const deleteBook = createAsyncThunk<BookResponse, any, { rejectValue: string }>(
+  'book/deleteBook',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/contents/${id}/delete`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {

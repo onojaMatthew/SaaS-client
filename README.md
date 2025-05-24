@@ -37,3 +37,13 @@ You have to create an account as a business so as to have a personalized dashboa
 To create an account, visit `http://18.130.240.185/register` from the home route
 To log in, visit `http://18.130.240.185/admin/login`
 
+
+To build the docker container follow the commands below:
+
+From the root directory run:
+
+`docker build -t username/image-name .`
+
+To start the docker container run:
+
+`docker run --env-file .env username/image-name` make sure you add .env at the root directory
