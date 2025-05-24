@@ -1,23 +1,28 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Input } from '../ui/input'
-import { usePathname } from 'next/navigation'
+import { usePathname,useRouter } from 'next/navigation'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 import LoadingSpinner from '../common/Spinner'
-import { Book } from '@/types/book'
+import { Book, BookPayload } from '@/types/book'
+import { RootState, useAppSelector } from '@/types/storeTypes'
+import { authUser } from '@/lib/utils'
 
 type Props = {
-  onSubmit: (formData: FormData) => void
+  onSubmit: (formData: BookPayload) => void
   loading?: boolean
   book: Book
 }
 
 export default function BookForm({ onSubmit, loading, book }: Props) {
+  const router = useRouter();
+  const { uploadSuccess } = useAppSelector((state: RootState) => state.book)
   const pathname = usePathname();
+  const loggedInUser = authUser()?.user;
   const { register, reset, handleSubmit, formState: { errors} } = useForm({
     defaultValues: {
       title: "",
@@ -29,7 +34,6 @@ export default function BookForm({ onSubmit, loading, book }: Props) {
     }
   });
 
-  
   useEffect(() => {
     if (book) {
       reset({
@@ -42,6 +46,12 @@ export default function BookForm({ onSubmit, loading, book }: Props) {
       });
     }
   }, [book, reset]);
+
+  useEffect(() => {
+    if (uploadSuccess) {
+      router.push(`/dashboard/${loggedInUser?.slug}`);
+    }
+  }, [ uploadSuccess]);
  
   const action = pathname.split("/")[3];
   const genres = [

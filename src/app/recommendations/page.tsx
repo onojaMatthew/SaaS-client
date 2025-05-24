@@ -1,42 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { getRecommendations } from '@/lib/api/recommendations'
-import { Recommendation } from '@/types/recommendation'
+import { useEffect } from 'react'
 import RecommendationList from '@/components/recommendations/RecommendationList'
-import RecommendationFilters from '@/components/recommendations/RecommendationFilters'
-import { useAuth } from '@/hooks/use-auth'
 import { authUser } from '@/lib/utils'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { getRecommendations } from '@/store/recommendationSlice'
 
 export default function RecommendationsPage() {
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
-  const [filter, setFilter] = useState('all')
-  const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch();
+  const { recommendations, loading } = useAppSelector((state: RootState) => state.recommendation)
   const isLoggedIn = authUser()
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: any = await getRecommendations(isLoggedIn?.user?.id || '')
-        setRecommendations(data?.data);
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    if (isLoggedIn) fetchData()
+    dispatch(getRecommendations(isLoggedIn?.user?.id));
   }, []);
-
-  const filtered = recommendations.filter((rec) =>
-    filter === 'all' ? true : rec.reason.toLowerCase().includes(filter)
-  )
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Your Book Recommendations</h1>
-      {/* <RecommendationFilters filter={filter} setFilter={setFilter} /> */}
-      {loading ? <p>Loading...</p> : <RecommendationList recommendations={filtered} />}
+      {loading ? <p>Loading...</p> : <RecommendationList recommendations={recommendations} />}
+      {recommendations.length === 0 && <p className='py-2 font-18'>No records found</p>}
     </div>
   )
 }

@@ -1,7 +1,16 @@
 import { Book } from './book'
 
 export interface Recommendation {
-  score: number
-  reason: string
-  book: Book
+  contentId?: string;
+  interactionType?: string;
+  score?: number
+  reason?: string
+  book?: Book
+}
+
+
+export interface RecommendationResponse {
+  success: boolean;
+  message: string;
+  data: any;
 }

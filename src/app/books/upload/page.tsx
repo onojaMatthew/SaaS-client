@@ -1,40 +1,23 @@
 'use client'
 
-import { useState } from 'react'
 import BookForm from '@/components/books/BookForm'
-import { uploadBook } from '@/lib/api/books'
 import { useRouter } from 'next/navigation'
-import { Book } from '@/types/book'
+import { BookPayload } from '@/types/book'
 import { ArrowLeftCircle } from 'lucide-react'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { uploadBook } from '@/store/bookSlice'
 
 export default function UploadBookPage() {
+  const dispatch = useAppDispatch();
+  const { book, loading } = useAppSelector((state: RootState) => state.book)
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [ book, setBook ] = useState<Book>({
-    _id: "",
-    title: "",
-    author: "",
-    description: "",
-    category: "",
-    url: "",
-    uploadedAt: "",
-    uploaderId: "",
-    averageRating: 0,
-    textContent: ""
-  })
+  
 
-  const handleUpload = async (formData: FormData) => {
-    try {
-      setLoading(true)
-      await uploadBook(formData)
-      router.push('/books')
-      setLoading(true);
-    } catch (err) {
-      console.error('Upload failed', err)
-    } finally {
-      setLoading(false)
-    }
+  const handleUpload = async (formData: BookPayload) => {
+    dispatch(uploadBook(formData));
   }
+
+ 
 
   return (
     <div className="p-6">

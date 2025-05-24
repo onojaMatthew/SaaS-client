@@ -1,28 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { getBookById } from '@/lib/api/book'
-import { Book } from '@/types/book'
 import BookDetails from '@/components/books/BookDetails'
 import LoadingSpinner from '@/components/common/Spinner'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { getBookById } from '@/store/bookSlice'
 export default function BookPage() {
-  const { id } = useParams()
-  const [book, setBook] = useState<Book | null>(null)
-  const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch();
+  const { book, loading } = useAppSelector((state: RootState) => state.book);
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const data = await getBookById(id as string)
-        setBook(data)
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+    if (typeof id !== "string") {
+      return;
     }
-    fetchBook()
+    dispatch(getBookById(id))
+      
   }, [id])
 
   return (

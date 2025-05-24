@@ -2,37 +2,44 @@
 
 import { useEffect, useState } from 'react';
 import { Book } from '@/types/book'
-import { rateBook } from '@/lib/api/books'
 import { useRouter } from 'next/navigation';
 import { RatingStars } from './RatingStars'
-import { ArrowLeft, ArrowLeftCircleIcon } from 'lucide-react';
+import { ArrowLeftCircleIcon } from 'lucide-react';
 import { authUser } from '@/lib/utils';
+import {  useAppDispatch } from '@/types/storeTypes';
+import { rateBook } from '@/store/bookSlice';
+import { logInteraction } from '@/store/recommendationSlice';
 
 type Props = {
   book: Book
 }
 
 export default function BookDetails({ book }: any) {
+  const dispatch = useAppDispatch();
   const [userRating, setUserRating] = useState<number | null>(null);
   const router = useRouter();
   const loggedInUser = authUser()?.user;
 
   useEffect(() => {
     // Optional: fetch user's existing rating if needed
-    const stored = localStorage.getItem(`book-rating-${book?.data?._id}`)
+    const stored = localStorage.getItem(`book-rating-${book?._id}`)
     if (stored) setUserRating(parseInt(stored))
   }, [book._id])
 
-  const handleRate = async (value: number) => {
+  const handleRate = async (value: number, id: string) => {
     setUserRating(value);
-    localStorage.setItem(`book-rating-${book?.data?._id}`, value.toString())
+    localStorage.setItem(`book-rating-${book?._id}`, value.toString())
 
     try {
-      await rateBook(book._id, value)
+      dispatch(rateBook({id, rating: value}))
     } catch (err) {
       console.error('Failed to rate book', err)
     }
   }
+
+  useEffect(() => {
+    dispatch(logInteraction({ contentId: book?._id, interactionType: "view" }))
+  }, [])
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -44,11 +51,11 @@ export default function BookDetails({ book }: any) {
           className="w-full md:w-64 h-auto object-cover rounded"
         />
         <div className="flex-1">
-          <h1 className="text-3xl font-bold">{book?.data?.title}</h1>
-          <p className="text-lg text-gray-700 mt-2">by {book?.data?.author}</p>
-          <p className="text-sm text-gray-500 mt-1">{book?.data?.category}</p>
-          <p className="mt-4 text-gray-800">{book?.data?.description}</p>
-          <p className="mt-4 text-gray-800">{book?.data?.textContent}</p>
+          <h1 className="text-3xl font-bold">{book?.title}</h1>
+          <p className="text-lg text-gray-700 mt-2">by {book?.author}</p>
+          <p className="text-sm text-gray-500 mt-1">{book?.category}</p>
+          <p className="mt-4 text-gray-800">{book?.description}</p>
+          <p className="mt-4 text-gray-800">{book?.textContent}</p>
         </div>
       </div>
      
@@ -60,14 +67,14 @@ export default function BookDetails({ book }: any) {
             userRating={userRating ?? undefined}
             onRate={(value) => {
               setUserRating(value)
-              rateBook(book?.data?._id, value)
+              handleRate(value, book?._id)
             }}
           />
         </div>
-        {loggedInUser?.role === "content_manager" && (
+        {loggedInUser?.role === "content_manager" && loggedInUser?.businessId?.toString() === book?.businessId?.toString() && (
           <div 
             className='bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 rounded p-2 hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
-            onClick={() => router.push(`/books/${book?.data?._id}/edit`)}>
+            onClick={() => router.push(`/books/${book?._id}/edit`)}>
               Edit book
           </div>
         )}

@@ -1,45 +1,50 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { getBookById, updateBook } from '@/lib/api/book'
 import BookForm from '@/components/books/BookForm'
-import { Book } from '@/types/book'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { getBookById, updateBook } from '@/store/bookSlice'
+import { ArrowLeftCircle } from 'lucide-react'
+import { authUser } from '@/lib/utils'
 
 export default function EditBookPage() {
-  const { id } = useParams()
-  const router = useRouter()
-  const [book, setBook] = useState<Book | null>(null)
-  const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch();
+  const { book, loading } = useAppSelector((state: RootState) => state.book)
+  const { id } = useParams();
+  const router = useRouter();
+  const loggedInUser = authUser()?.user;
 
   useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const data: any = await getBookById(id as string)
-        setBook(data?.data)
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+    if (typeof id !== 'string') {
+      return;
     }
-    fetchBook()
+    if (id) {
+      dispatch(getBookById(id));
+    }
   }, [id])
 
   const handleUpdate = async (data: any) => {
+    if (typeof id !== 'string') {
+      return;
+    }
     try {
-      await updateBook(id as string, data)
-      router.push(`/books/${id}`)
+      dispatch(updateBook({ id, data }))
+      
     } catch (err) {
       console.error('Failed to update book', err)
     }
   }
-
+ 
   if (loading || !book) return <div className="p-6"><p>Loading...</p></div>
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Edit Book</h1>
+      <div className='flex '>
+        <ArrowLeftCircle size={40} onClick={() => router.push(`/dashboard/${loggedInUser?.slug}`)} className='mx-4' />
+        <h1 className="text-2xl font-bold mb-4">Edit Book</h1>
+      </div>
+      
       <BookForm book={book} onSubmit={handleUpdate} />
     </div>
   )

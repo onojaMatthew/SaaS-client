@@ -1,28 +1,36 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import AuthForm from '@/components/auth/AuthForm'
-import { loginReader } from '@/lib/api/auth'
+import { useEffect, useState } from 'react'
+import AuthForm from '@/components/auth/AuthForm';
 import { authUser } from '@/lib/utils'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { loginReader } from '@/store/authSlice';
 
 export default function LoginPage() {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
+  const dispatch = useAppDispatch();
+  const { error, success, user } = useAppSelector((state: RootState) => state.auth);
+  const [errMsg, setError] = useState<string | null>(null)
 
   const handleLogin = async ({ email, password }: {email: string, password: string}) => {
     try {
-      await loginReader({ email, password })
-      const isLoggedIn: any = authUser()
-      if (isLoggedIn && isLoggedIn?.user?.role === "user") {
-        router.push('/books');
-      } else {
-        router.push("/login")
-      }
+      dispatch(loginReader({ email, password }))
     } catch (err: any) {
       setError(err.message || 'Login failed')
     }
   }
+
+  useEffect(() => {
+    if (success && user) {
+      router.push('/books');
+    }
+  }, [ success ])
+  useEffect(() => {
+    if (error) {
+      setError(error)
+    }
+  }, [ error ])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">

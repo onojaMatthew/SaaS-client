@@ -1,13 +1,18 @@
+"use client";
+
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { ToastProvider } from './components/providers/ToastProvider'
-import { AuthProvider } from '@/components/providers/AuthProvider'
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <ToastProvider>
-        <AuthProvider>{children}</AuthProvider>
+          <Provider store={store}>
+            {children}
+          </Provider>
       </ToastProvider>
     </ThemeProvider>
-  )
+  );
 }

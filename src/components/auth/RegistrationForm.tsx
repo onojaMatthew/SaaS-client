@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import FormField from './FormField'
 import LoadingSpinner from '../common/Spinner';
+import { RootState, useAppSelector } from '@/types/storeTypes';
+import Link from 'next/link';
 
 type Props = {
   type: 'login' | 'register'
@@ -15,7 +17,7 @@ type Props = {
 }
 
 export default function RegistrationForm({ type, onSubmit, error, title }: Props) {
-  const [loading, setLoading ] = useState(false)
+  const { loading } = useAppSelector((state: RootState) => state.auth);
   const { register, handleSubmit, formState: { errors} } = useForm({
     defaultValues: {
       name: "",
@@ -23,13 +25,10 @@ export default function RegistrationForm({ type, onSubmit, error, title }: Props
       email: "",
       password: ""
     }
-  })
-  ;
+  });
   
   const onHandleSubmit = (data: {name: string, businessName: string, email: string, password: string}) => {
-    setLoading(true)
     onSubmit(data);
-    setLoading(false);
   }
 
   return (
@@ -70,6 +69,7 @@ export default function RegistrationForm({ type, onSubmit, error, title }: Props
       <Button type="submit" className="w-full">
         {type === 'login' ? loading ? <LoadingSpinner/> : 'Login' : loading ? <LoadingSpinner /> : 'Register'}
       </Button>
+      <p className='my-2'>Already have? <Link href={"/admin/login"}>Login</Link></p>
     </form>
   )
 }

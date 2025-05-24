@@ -1,10 +1,11 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
+import { usePathname } from 'next/navigation'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import FormField from './FormField'
 import LoadingSpinner from '../common/Spinner'
+import { RootState, useAppSelector } from '@/types/storeTypes'
+import Link from 'next/link'
 
 type Props = {
   type: 'login' | 'register'
@@ -14,7 +15,8 @@ type Props = {
 }
 
 export default function AuthForm({ type, onSubmit, error, title }: Props) {
-  const [ loading, setLoading ] = useState(false)
+  const { loading } = useAppSelector((state: RootState) => state.auth)
+  const pathname = usePathname()
   const { register, handleSubmit, formState: { errors} } = useForm({
     defaultValues: {
       email: "",
@@ -22,11 +24,10 @@ export default function AuthForm({ type, onSubmit, error, title }: Props) {
     }
   })
   const onHandleSubmit = (data: {email: string, password: string }) => {
-    setLoading(true)
     onSubmit(data);
-    setLoading(false)
   }
 
+  console.log(pathname)
   return (
     <form
       onSubmit={handleSubmit(onHandleSubmit)}
@@ -53,6 +54,11 @@ export default function AuthForm({ type, onSubmit, error, title }: Props) {
       <Button type="submit" className="w-full">
         {type === 'login' ? loading ? <LoadingSpinner /> : 'Login' : loading ? <LoadingSpinner /> : 'Register'}
       </Button>
+      {pathname === "/admin/login" ? <p className='py-2'>Don't have account? <Link href={"/register"}>Register</Link></p> : pathname === "/register" ?
+      <p className='py-2'>Already have account? <Link href={"/admin/login"}>Login</Link></p> : null}
+      {pathname === "/login" ? <p className='py-2'>Don't have account? <Link href={"/signup"}>Register</Link></p> : pathname === "/signup" ?
+      <p className='py-2'>Already have account? <Link href={"/login"}>Login</Link></p> : null}
+      
     </form>
   )
 }

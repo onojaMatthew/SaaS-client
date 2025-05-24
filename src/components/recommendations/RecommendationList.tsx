@@ -1,11 +1,8 @@
 import Link from 'next/link'
 import RecommendationCard from './RecommendationCard'
 import { Recommendation } from '@/types/recommendation'
-import { Book } from '@/types/book'
 
-type Props = {
-  recommendations: Recommendation[]
-}
+
 
 export default function RecommendationList({ recommendations }: any) {
   return (

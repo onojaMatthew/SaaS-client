@@ -3,33 +3,31 @@
 'use client'
 
 import Link from 'next/link'
-import { getUserUploadedBooks } from '@/lib/api/books'
 import { Book } from '@/types/book'
 import BookCard from '@/components/books/BookCard'
+import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/common/Spinner'
-import { BookOpenText, Settings, UploadCloud, Sparkles } from 'lucide-react'
+import { UploadCloud } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { authUser } from '@/lib/utils'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { getUserUploadedBooks } from '@/store/bookSlice'
 
 export default function DashboardPage() {
-  const [books, setBooks] = useState<Book[]>([])
-  const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch();
+  const { books, loading } = useAppSelector((state: RootState) => state.book);
+  const router = useRouter();
 
+const loggedInUser: any = authUser();
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const userBooks: any = await getUserUploadedBooks();
-        setBooks(userBooks?.data)
-      } catch (error) {
-        console.error('Failed to fetch books:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (!loggedInUser?.user) {
+      router.push("/admin/login");
     }
+    dispatch(getUserUploadedBooks());
+  }, []);
 
-    fetchBooks()
-  }, [])
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold text-gray-900">Welcome to Your Dashboard</h1>
@@ -54,23 +52,6 @@ export default function DashboardPage() {
             </Link>
           </CardContent>
         </Card>
-
-        {/* <Card className="hover:shadow-lg transition">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-purple-600">
-              <Settings className="w-5 h-5" />
-              User Settings
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-700 mb-4">
-              Customize your profile and reading preferences.
-            </p>
-            <Link href="/settings/preferences">
-              <Button variant="primary">Settings</Button>
-            </Link>
-          </CardContent>
-        </Card> */}
       </div>
 
       <div className="mt-10">
@@ -84,7 +65,7 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-400 italic">You haven't uploaded any books yet.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {books.map((book) => (
+              {books.map((book: Book) => (
                 <Link key={book._id} href={`/books/${book._id}`}>
                   <BookCard key={book._id} book={book} />
                 </Link>

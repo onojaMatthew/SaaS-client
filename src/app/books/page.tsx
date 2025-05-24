@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Book } from '@/types/book'
-import { getBooks } from '@/lib/api/books'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import BookGrid from '@/components/books/BookGrid'
 import LoadingSpinner from '@/components/common/Spinner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,24 +9,22 @@ import { Settings, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { authUser } from '@/lib/utils'
+import { getBooks } from '@/store/bookSlice'
+import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 
 export default function BooksPage() {
-  const [books, setBooks] = useState<Book[]>([])
-  const [loading, setLoading] = useState(true)
+  const dispatch = useAppDispatch()
+  const { books, loading } = useAppSelector((state: RootState) => state.book)
+  const router = useRouter();
   const loggedInUser = authUser()?.user;
+
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const data: any = await getBooks();
-        setBooks(data?.data)
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+    if (!loggedInUser) {
+      router.push("/login");
+    } else {
+      dispatch(getBooks());
     }
-    fetchBooks()
-  }, [])
+  }, []);
 
   return (
     <div className="p-6">
@@ -76,9 +73,9 @@ export default function BooksPage() {
         </>
       )}
       
-
       <h1 className="text-2xl font-bold mt-8 mb-2">All Books</h1>
-      {loading ? <LoadingSpinner /> : <BookGrid books={books} />}
+      {loading ? <LoadingSpinner /> : <BookGrid books={books} /> }
+      
     </div>
   )
 }
