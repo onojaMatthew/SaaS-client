@@ -12,5 +12,5 @@ export interface Recommendation {
 export interface RecommendationResponse {
   success: boolean;
   message: string;
-  data: any;
+  data: any
 }
