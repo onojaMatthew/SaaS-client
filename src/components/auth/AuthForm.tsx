@@ -27,7 +27,6 @@ export default function AuthForm({ type, onSubmit, error, title }: Props) {
     onSubmit(data);
   }
 
-  console.log(pathname)
   return (
     <form
       onSubmit={handleSubmit(onHandleSubmit)}

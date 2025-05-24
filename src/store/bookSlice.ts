@@ -155,7 +155,7 @@ export const getBookById = createAsyncThunk<BookResponse, string, { rejectValue:
   'book/getBookById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/contents/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents/${id}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -181,7 +181,7 @@ export const getBooks = createAsyncThunk<BookResponse, void, { rejectValue: stri
   'book/getBooks',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/contents/`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents/`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -208,7 +208,7 @@ export const uploadBook = createAsyncThunk<BookResponse, BookPayload, { rejectVa
   async (data, { rejectWithValue }) => {
     data["businessId"] = businessId
     try {
-      const response = await fetch(`${API_BASE_URL}/contents/`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents/`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -263,7 +263,7 @@ export const getUserUploadedBooks = createAsyncThunk<BookResponse, void, { rejec
   'book/getUserUploadedBooks',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/contents?businessId=${businessId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -289,7 +289,7 @@ export const deleteBook = createAsyncThunk<BookResponse, any, { rejectValue: str
   'book/deleteBook',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/contents/${id}/delete`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents/${id}/delete`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -315,7 +315,7 @@ export const updateBook = createAsyncThunk<BookResponse, {id: string, data: any}
   'book/updateBook',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/contents/${data.id}/update`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/contents/${data.id}/update`, {
         method: "PUT",
         headers: {
           "Accept": "application/json",

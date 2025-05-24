@@ -64,7 +64,7 @@ export const getRecommendations = createAsyncThunk<RecommendationResponse, Recom
   async (id, { rejectWithValue }) => {
     console.log(id, " the user Id")
     try {
-      const response = await fetch(`${API_BASE_URL}/recommendations?userId=${id}&limit=20`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/recommendations?userId=${id}&limit=20`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -91,7 +91,7 @@ export const logInteraction = createAsyncThunk<RecommendationResponse, Recommend
   async (data, { rejectWithValue }) => {
     console.log(data, " the data in log")
     try {
-      const response = await fetch(`${API_BASE_URL}/recommendations/interaction`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/recommendations/interaction`, {
         method: "POST",
         headers: {
           "Accept": "application/json",

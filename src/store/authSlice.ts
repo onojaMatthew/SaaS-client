@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AuthResponse, LoginCredentials, RegisterCredentials } from '@/types/auth';
 import { API_BASE_URL } from '@/config/constant';
 import { authUser } from '@/lib/utils';
@@ -35,7 +35,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    
+   
   },
   extraReducers: (builder) => {
     builder
@@ -116,6 +116,12 @@ const authSlice = createSlice({
           state.error = action.payload.message;
         }
       })
+      .addCase(registerBusiness.rejected, (state, action) => {
+        console.log(action, " action rejected")
+        state.loading = false;
+        state.success = false;
+        state.error = action.error.message!
+      })
   },
 });
 
@@ -137,7 +143,7 @@ export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentia
   'auth/registerBusiness',
   async (data, { rejectWithValue}) => {
     try {
-      let response = await fetch(`${API_BASE_URL}/auth/business/register`, {
+      let response = await fetch(`${API_BASE_URL}/api/v1/auth/business/register`, {
         method: "POST",
         headers: {
           "ACCEPT": "application/json",
@@ -166,7 +172,7 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
   'auth/loginBusiness',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/business/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/business/login`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -200,7 +206,7 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
 export const fetchUserProfile = createAsyncThunk(
   'auth/fetchUserProfile',
   async () => {
-   let response = await fetch(`${API_BASE_URL}/auth/me`, {
+   let response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
@@ -219,7 +225,7 @@ export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { re
   'auth/loginReader',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/user/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/user/login`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -252,7 +258,7 @@ export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { re
 export const registerUser = createAsyncThunk<AuthResponse, LoginCredentials>(
   "auth/registerUser",
   async (data) => {
-    let res: any = await fetch(`${API_BASE_URL}/auth/user/register`, {
+    let res: any = await fetch(`${API_BASE_URL}/api/v1/auth/user/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

@@ -9,14 +9,14 @@ export const store = configureStore({
    auth: authSlice,
    book: bookSlice,
    recommendation: recommendationSlice
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  }
 });
 
 
 
 
-
+// ,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: false,
+//     }),

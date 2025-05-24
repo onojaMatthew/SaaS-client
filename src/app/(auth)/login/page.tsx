@@ -6,6 +6,7 @@ import AuthForm from '@/components/auth/AuthForm';
 import { authUser } from '@/lib/utils'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { loginReader } from '@/store/authSlice';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter()
@@ -28,7 +29,7 @@ export default function LoginPage() {
   }, [ success ])
   useEffect(() => {
     if (error) {
-      setError(error)
+      toast.error(error);
     }
   }, [ error ])
 
