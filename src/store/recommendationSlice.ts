@@ -73,11 +73,6 @@ export const getRecommendations = createAsyncThunk<RecommendationResponse, Recom
         },
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
-
       const resp: RecommendationResponse = await response.json();
       return resp;
     } catch (error: any) {
@@ -100,11 +95,6 @@ export const logInteraction = createAsyncThunk<RecommendationResponse, Recommend
         },
         body: JSON.stringify(data)
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: RecommendationResponse = await response.json();
       return resp;

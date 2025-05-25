@@ -14,7 +14,7 @@ yarn install
 3. Configure Environment Variables
 Create a .env.local file:
 
-NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1
+NEXT_PUBLIC_API_BASE_URL=http://35.179.111.36
 
 ⚙️ Starting the server
 1.  Development environment

@@ -7,10 +7,11 @@ import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { getBookById, updateBook } from '@/store/bookSlice'
 import { ArrowLeftCircle } from 'lucide-react'
 import { authUser } from '@/lib/utils'
+import { toast } from 'sonner'
 
 export default function EditBookPage() {
   const dispatch = useAppDispatch();
-  const { book, loading } = useAppSelector((state: RootState) => state.book)
+  const { book, error, loading } = useAppSelector((state: RootState) => state.book)
   const { id } = useParams();
   const router = useRouter();
   const loggedInUser = authUser()?.user;
@@ -28,14 +29,16 @@ export default function EditBookPage() {
     if (typeof id !== 'string') {
       return;
     }
-    try {
-      dispatch(updateBook({ id, data }))
       
-    } catch (err) {
-      console.error('Failed to update book', err)
-    }
+    dispatch(updateBook({ id, data }))
+      
   }
  
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [ error ])
   if (loading || !book) return <div className="p-6"><p>Loading...</p></div>
 
   return (

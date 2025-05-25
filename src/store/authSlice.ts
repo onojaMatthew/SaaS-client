@@ -48,6 +48,12 @@ const authSlice = createSlice({
           state.success = true;
           state.user = action.payload.data.user;
           state.business = action.payload.data.business;
+          const tokenData = {
+            user: action.payload.data.user,
+            token: action.payload.data.token,
+            business: action.payload.data.business
+          };
+          saveToken(tokenData);
         } else {
           state.loading = false;
           state.success = false;
@@ -80,6 +86,11 @@ const authSlice = createSlice({
           state.loading = false;
           state.success = true;
           state.user = action.payload.data;
+          const tokenData = {
+            user: action.payload.data.user,
+            token: action.payload.data.token,
+          };
+          saveToken(tokenData);
         } else {
           state.loading = false;
           state.success = false;
@@ -95,6 +106,11 @@ const authSlice = createSlice({
           state.loading = false;
           state.success = true;
           state.user = action.payload.data.user;
+          const tokenData = {
+            user: action.payload.data.user,
+            token: action.payload.data.token,
+          };
+          saveToken(tokenData);
         } else {
           state.loading = false;
           state.success = false;
@@ -110,6 +126,12 @@ const authSlice = createSlice({
           state.success = true;
           state.business = action.payload.data.business
           state.user = action.payload.data.user;
+          const tokenData = {
+            user: action.payload.data.user,
+            token: action.payload.data.token,
+            business: action.payload.data.business
+          };
+          saveToken(tokenData);
         } else {
           state.loading = false;
           state.success = false;
@@ -153,12 +175,7 @@ export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentia
       })
 
       const resp: AuthResponse = await response.json()
-       const tokenData = {
-        user: resp.data.user,
-        token: resp.data.token,
-        business: resp.data.business
-      };
-      saveToken(tokenData);
+       
       return resp;
     } catch (error: any) {
       console.log('Registration failed');
@@ -181,19 +198,9 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
         body: JSON.stringify(data)
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Login failed');
-      }
-
       const resp: AuthResponse = await response.json();
 
-      const tokenData = {
-        user: resp.data.user,
-        token: resp.data.token,
-        business: resp.data.business
-      };
-      saveToken(tokenData);
+     
       return resp;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Login failed');
@@ -216,7 +223,6 @@ export const fetchUserProfile = createAsyncThunk(
     })
     
     const resp = await response.json();
-    saveToken(resp);
     return resp;
   }
 );
@@ -234,20 +240,7 @@ export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { re
         body: JSON.stringify(data)
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Login failed');
-      }
-
       const resp: AuthResponse = await response.json();
-
-      const tokenData = {
-        user: resp.data.user,
-        token: resp.data.token,
-        business: resp.data.business
-      };
-
-      saveToken(tokenData);
       return resp;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Login failed');
@@ -263,13 +256,9 @@ export const registerUser = createAsyncThunk<AuthResponse, LoginCredentials>(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-    if (!res.ok) throw new Error('Unable to register');
+    
+    
     res = await res.json()
-    const tokenData = {
-      user: res?.data?.user,
-      token: res?.data?.token
-    }
-    saveToken(tokenData);
     return res;
   }
 );

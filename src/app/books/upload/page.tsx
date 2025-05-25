@@ -6,10 +6,12 @@ import { BookPayload } from '@/types/book'
 import { ArrowLeftCircle } from 'lucide-react'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { uploadBook } from '@/store/bookSlice'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 export default function UploadBookPage() {
   const dispatch = useAppDispatch();
-  const { book, loading } = useAppSelector((state: RootState) => state.book)
+  const { book, loading, error } = useAppSelector((state: RootState) => state.book)
   const router = useRouter()
   
 
@@ -17,7 +19,11 @@ export default function UploadBookPage() {
     dispatch(uploadBook(formData));
   }
 
- 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [ error ])
 
   return (
     <div className="p-6">

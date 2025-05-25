@@ -146,10 +146,7 @@ const bookSlice = createSlice({
 
 export const {} = bookSlice.actions;
 
-
-
 export default bookSlice.reducer;
-
 
 export const getBookById = createAsyncThunk<BookResponse, string, { rejectValue: string }>(
   'book/getBookById',
@@ -163,11 +160,6 @@ export const getBookById = createAsyncThunk<BookResponse, string, { rejectValue:
           "authorization": `Bearer ${token}`
         },
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: BookResponse = await response.json();
       return resp;
@@ -189,11 +181,6 @@ export const getBooks = createAsyncThunk<BookResponse, void, { rejectValue: stri
           "authorization": `Bearer ${token}`
         },
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: BookResponse = await response.json();
       return resp;
@@ -218,10 +205,6 @@ export const uploadBook = createAsyncThunk<BookResponse, BookPayload, { rejectVa
         body: JSON.stringify(data)
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: BookResponse = await response.json();
       return resp;
@@ -272,10 +255,6 @@ export const getUserUploadedBooks = createAsyncThunk<BookResponse, void, { rejec
         },
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: BookResponse = await response.json();
       return resp;
@@ -298,11 +277,6 @@ export const deleteBook = createAsyncThunk<BookResponse, any, { rejectValue: str
         }
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
-
       const resp: BookResponse = await response.json();
       return resp;
     } catch (error: any) {
@@ -324,11 +298,6 @@ export const updateBook = createAsyncThunk<BookResponse, {id: string, data: any}
         },
         body: JSON.stringify(data)
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch book');
-      }
 
       const resp: BookResponse = await response.json();
       return resp;

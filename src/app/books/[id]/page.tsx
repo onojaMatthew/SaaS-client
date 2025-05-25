@@ -6,9 +6,10 @@ import BookDetails from '@/components/books/BookDetails'
 import LoadingSpinner from '@/components/common/Spinner'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { getBookById } from '@/store/bookSlice'
+import { toast } from 'sonner'
 export default function BookPage() {
   const dispatch = useAppDispatch();
-  const { book, loading } = useAppSelector((state: RootState) => state.book);
+  const { book, loading, error } = useAppSelector((state: RootState) => state.book);
   const { id } = useParams();
 
   useEffect(() => {
@@ -19,6 +20,11 @@ export default function BookPage() {
       
   }, [id])
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [ error ])
   return (
     <div className="p-6">
       {loading ? <LoadingSpinner /> : book && <BookDetails book={book} />}

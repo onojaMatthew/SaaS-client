@@ -14,10 +14,11 @@ import { useEffect } from 'react';
 import { authUser } from '@/lib/utils'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { getUserUploadedBooks } from '@/store/bookSlice'
+import { toast } from 'sonner'
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
-  const { books, loading } = useAppSelector((state: RootState) => state.book);
+  const { books, loading, error } = useAppSelector((state: RootState) => state.book);
   const router = useRouter();
 
 const loggedInUser: any = authUser();
@@ -27,6 +28,12 @@ const loggedInUser: any = authUser();
     }
     dispatch(getUserUploadedBooks());
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [ error ])
 
   return (
     <div className="p-6 space-y-6">
