@@ -3,8 +3,6 @@ import { API_BASE_URL } from '@/config/constant';
 import { Book, BookPayload, BookResponse } from '@/types/book';
 import { authUser } from '@/lib/utils';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 const user = authUser();
 const businessId = user?.user?.businessId;
 const token = user?.token;
