@@ -3,11 +3,6 @@ import { authUser } from '@/lib/utils';
 import { Recommendation, RecommendationResponse } from '@/types/recommendation';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-
-const loggedInUser = authUser()
-const token = loggedInUser?.token;
-const businessId = loggedInUser?.user?.businessId;
-
 const BASE_URL = API_BASE_URL ||  "http://35.179.111.36"
 
 const initialState = {
@@ -64,7 +59,9 @@ export default recommendationSlice.reducer;
 export const getRecommendations = createAsyncThunk<RecommendationResponse, Recommendation, { rejectValue: string }>(
   'book/getRecommendations',
   async (id, { rejectWithValue }) => {
-    console.log(id, " the user Id")
+    const loggedInUser = authUser()
+    const token = loggedInUser?.token;
+    const businessId = loggedInUser?.user?.businessId;
     try {
       const response = await fetch(`${BASE_URL}/api/v1/recommendations?userId=${id}&limit=20`, {
         method: "GET",
@@ -86,7 +83,9 @@ export const getRecommendations = createAsyncThunk<RecommendationResponse, Recom
 export const logInteraction = createAsyncThunk<RecommendationResponse, Recommendation, { rejectValue: string }>(
   'book/logInteraction',
   async (data, { rejectWithValue }) => {
-    console.log(data, " the data in log")
+    const loggedInUser = authUser()
+    const token = loggedInUser?.token;
+    const businessId = loggedInUser?.user?.businessId;
     try {
       const response = await fetch(`${BASE_URL}/api/v1/recommendations/interaction`, {
         method: "POST",

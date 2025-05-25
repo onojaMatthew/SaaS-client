@@ -3,8 +3,7 @@ import { AuthResponse, LoginCredentials, RegisterCredentials } from '@/types/aut
 import { API_BASE_URL } from '@/config/constant';
 import { authUser } from '@/lib/utils';
 
-const user = authUser();
-const token = user?.token;
+
 
 const BASE_URL = API_BASE_URL ||  "http://35.179.111.36"
 
@@ -45,6 +44,7 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(loginBusiness.fulfilled, (state, action) => {
+        console.log(action)
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
@@ -84,6 +84,7 @@ const authSlice = createSlice({
         
       })
       .addCase(loginReader.fulfilled, (state, action) => {
+        console.log(action, " in the reader ful")
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
@@ -166,6 +167,8 @@ export default authSlice.reducer;
 export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentials, { rejectValue: string }>(
   'auth/registerBusiness',
   async (data, { rejectWithValue}) => {
+    const user = authUser();
+    const token = user?.token;
     try {
       let response = await fetch(`${BASE_URL}/api/v1/auth/business/register`, {
         method: "POST",
@@ -190,6 +193,8 @@ export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentia
 export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { rejectValue: string }>(
   'auth/loginBusiness',
   async (data, { rejectWithValue }) => {
+    const user = authUser();
+    const token = user?.token;
     try {
       const response = await fetch(`${BASE_URL}/api/v1/auth/business/login`, {
         method: "POST",
@@ -201,7 +206,7 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
       });
 
       const resp: AuthResponse = await response.json();
-
+      console.log(resp, " the resp")
      
       return resp;
     } catch (error: any) {
@@ -215,6 +220,8 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
 export const fetchUserProfile = createAsyncThunk(
   'auth/fetchUserProfile',
   async () => {
+    const user = authUser();
+    const token = user?.token;
    let response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
       method: "GET",
       headers: {
@@ -232,6 +239,8 @@ export const fetchUserProfile = createAsyncThunk(
 export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { rejectValue: string }>(
   'auth/loginReader',
   async (data, { rejectWithValue }) => {
+    const user = authUser();
+    const token = user?.token;
     try {
       const response = await fetch(`${BASE_URL}/api/v1/auth/user/login`, {
         method: "POST",
@@ -258,7 +267,6 @@ export const registerUser = createAsyncThunk<AuthResponse, LoginCredentials>(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-    
     
     res = await res.json()
     return res;

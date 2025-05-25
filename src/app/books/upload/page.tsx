@@ -8,6 +8,7 @@ import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
 import { uploadBook } from '@/store/bookSlice'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { authUser } from '@/lib/utils'
 
 export default function UploadBookPage() {
   const dispatch = useAppDispatch();
@@ -24,6 +25,13 @@ export default function UploadBookPage() {
       toast.error(error);
     }
   }, [ error ])
+
+  useEffect(() => {
+    const user = authUser()?.user;
+    if (!user || user.role !== "content_manager") {
+      router.push("/admin/login");
+    }
+  })
 
   return (
     <div className="p-6">
