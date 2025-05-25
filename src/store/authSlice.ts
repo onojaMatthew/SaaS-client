@@ -6,6 +6,8 @@ import { authUser } from '@/lib/utils';
 const user = authUser();
 const token = user?.token;
 
+const BASE_URL = API_BASE_URL ||  "http://35.179.111.36"
+
 interface InitialState {
   user: object | any;
   business: object | any
@@ -165,7 +167,7 @@ export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentia
   'auth/registerBusiness',
   async (data, { rejectWithValue}) => {
     try {
-      let response = await fetch(`${API_BASE_URL}/api/v1/auth/business/register`, {
+      let response = await fetch(`${BASE_URL}/api/v1/auth/business/register`, {
         method: "POST",
         headers: {
           "ACCEPT": "application/json",
@@ -189,7 +191,7 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
   'auth/loginBusiness',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/business/login`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/business/login`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -213,7 +215,7 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
 export const fetchUserProfile = createAsyncThunk(
   'auth/fetchUserProfile',
   async () => {
-   let response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+   let response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
@@ -231,7 +233,7 @@ export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { re
   'auth/loginReader',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/user/login`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/user/login`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -251,7 +253,7 @@ export const loginReader = createAsyncThunk<AuthResponse, LoginCredentials, { re
 export const registerUser = createAsyncThunk<AuthResponse, LoginCredentials>(
   "auth/registerUser",
   async (data) => {
-    let res: any = await fetch(`${API_BASE_URL}/api/v1/auth/user/register`, {
+    let res: any = await fetch(`${BASE_URL}/api/v1/auth/user/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

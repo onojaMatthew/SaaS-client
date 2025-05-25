@@ -8,6 +8,8 @@ const loggedInUser = authUser()
 const token = loggedInUser?.token;
 const businessId = loggedInUser?.user?.businessId;
 
+const BASE_URL = API_BASE_URL ||  "http://35.179.111.36"
+
 const initialState = {
   recommendations: [],
   loading: false,
@@ -64,7 +66,7 @@ export const getRecommendations = createAsyncThunk<RecommendationResponse, Recom
   async (id, { rejectWithValue }) => {
     console.log(id, " the user Id")
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/recommendations?userId=${id}&limit=20`, {
+      const response = await fetch(`${BASE_URL}/api/v1/recommendations?userId=${id}&limit=20`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -86,7 +88,7 @@ export const logInteraction = createAsyncThunk<RecommendationResponse, Recommend
   async (data, { rejectWithValue }) => {
     console.log(data, " the data in log")
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/recommendations/interaction`, {
+      const response = await fetch(`${BASE_URL}/api/v1/recommendations/interaction`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
