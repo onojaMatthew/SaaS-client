@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { API_BASE_URL } from '@/config/constant';
 import { Book, BookPayload, BookResponse } from '@/types/book';
 import { authUser } from '@/lib/utils';
 
