@@ -12,6 +12,7 @@ interface InitialState {
   uploadSuccess: boolean;
   error: string | null;
   deleteLoading: boolean;
+  deleteSuccess: boolean;
 }
 
 const initialState: InitialState = {
@@ -22,6 +23,7 @@ const initialState: InitialState = {
   success: false,
   error: null,
   deleteLoading: false, 
+  deleteSuccess: false,
 };
 
 const bookSlice = createSlice({
@@ -127,13 +129,13 @@ const bookSlice = createSlice({
       })
       .addCase(deleteBook.fulfilled, (state, action) => {
         if (action.payload.success) {
-          state.loading = false;
-          state.deleteLoading = true;
+          state.deleteLoading = false;
+          state.deleteSuccess = true;
           state.books = state.books.filter((book: Book) => book._id === action.payload.data._id);
         } else {
-          state.loading = false;
-          state.error = action.payload.message;
           state.deleteLoading = false;
+          state.error = action.payload.message;
+          state.deleteSuccess = false;
         }
         
       })
