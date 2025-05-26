@@ -230,7 +230,7 @@ export const rateBook = createAsyncThunk<BookResponse, any, { rejectValue: strin
     const businessId = user?.user?.businessId;
     const token = user?.token;
     try {
-      const response = await fetch(`${BASE_URL}/contents/${data.id}/rate`, {
+      const response = await fetch(`${BASE_URL}/contents/rate?id=${data.id}`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -285,7 +285,7 @@ export const deleteBook = createAsyncThunk<BookResponse, any, { rejectValue: str
     const businessId = user?.user?.businessId;
     const token = user?.token;
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/contents/${id}/delete`, {
+      const response = await fetch(`${BASE_URL}/api/v1/contents/delete?id=${id}`, {
         method: "DELETE",
         headers: {
           "Accept": "application/json",
@@ -309,7 +309,7 @@ export const updateBook = createAsyncThunk<BookResponse, {id: string, data: any}
     const businessId = user?.user?.businessId;
     const token = user?.token;
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/contents/${data.id}/update`, {
+      const response = await fetch(`${BASE_URL}/api/v1/contents/update?id=${data.id}`, {
         method: "PUT",
         headers: {
           "Accept": "application/json",
