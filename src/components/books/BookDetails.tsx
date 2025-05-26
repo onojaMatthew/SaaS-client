@@ -12,6 +12,7 @@ import { logInteraction } from '@/store/recommendationSlice';
 import LoadingSpinner from '../common/Spinner';
 
 export default function BookDetails({ book }: any) {
+  console.log(book)
   const { deleteSuccess, deleteLoading } = useAppSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
   const [userRating, setUserRating] = useState<number | null>(null);
@@ -20,13 +21,13 @@ export default function BookDetails({ book }: any) {
 
   useEffect(() => {
     // Optional: fetch user's existing rating if needed
-    const stored = localStorage.getItem(`book-rating-${book?._id}`)
+    const stored = localStorage.getItem(`book-rating-${book[0]?._id}`)
     if (stored) setUserRating(parseInt(stored))
   }, [book._id])
 
   const handleRate = async (value: number, id: string) => {
     setUserRating(value);
-    localStorage.setItem(`book-rating-${book?._id}`, value.toString())
+    localStorage.setItem(`book-rating-${book[0]?._id}`, value.toString())
 
     try {
       dispatch(rateBook({id, rating: value}))
@@ -59,11 +60,11 @@ export default function BookDetails({ book }: any) {
           className="w-full md:w-64 h-auto object-cover rounded"
         />
         <div className="flex-1">
-          <h1 className="text-3xl font-bold">{book?.title}</h1>
-          <p className="text-lg text-gray-700 mt-2">by {book?.author}</p>
-          <p className="text-sm text-gray-500 mt-1">{book?.category}</p>
-          <p className="mt-4 text-gray-800">{book?.description}</p>
-          <p className="mt-4 text-gray-800">{book?.textContent}</p>
+          <h1 className="text-3xl font-bold">{book[0]?.title}</h1>
+          <p className="text-lg text-gray-700 mt-2">by {book[0]?.author}</p>
+          <p className="text-sm text-gray-500 mt-1">{book[0]?.category}</p>
+          <p className="mt-4 text-gray-800">{book[0]?.description}</p>
+          <p className="mt-4 text-gray-800">{book[0]?.textContent}</p>
         </div>
       </div>
      
@@ -79,16 +80,16 @@ export default function BookDetails({ book }: any) {
             }}
           />
         </div>
-        {loggedInUser?.role === "content_manager" && loggedInUser?.businessId?.toString() === book?.businessId?.toString() && (
+        {loggedInUser?.role === "content_manager" && loggedInUser?.businessId?.toString() === book[0]?.businessId?.toString() && (
           <div className='flex'>
             <div 
               className='bg-blue-600 text-white h-10 px-2 hover:bg-blue-700 mr-4 focus:ring-blue-500 rounded hover:cursor-pointer shadow flex justify-center items-center gb-blue-500' 
-              onClick={() => router.push(`/books/${book?._id}/edit`)}>
+              onClick={() => router.push(`/books/${book[0]?._id}/edit`)}>
                 Edit book
             </div>
             <div
               className='bg-red-600 text-white hover:bg-red-700 focus:ring-blue-red rounded h-10 px-2 hover:cursor-pointer shadow flex justify-center items-center gb-red-500' 
-              onClick={() => handleDelete(book?._id)}>
+              onClick={() => handleDelete(book[0]?._id)}>
                 { deleteLoading ? <LoadingSpinner /> : "Delete book"}
             </div>  
           </div>

@@ -38,6 +38,7 @@ const bookSlice = createSlice({
         state.loading = true;
       })
       .addCase(getBookById.fulfilled, (state, action) => {
+        console.log(action)
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
