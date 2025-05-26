@@ -55,8 +55,8 @@ export default function BookDetails({ book }: any) {
       <ArrowLeftCircleIcon size={40} className='mb-2 hover:cursor-pointer' onClick={() => router.back()}/>
       <div className="flex flex-col md:flex-row gap-6">
         <img
-          src={book?.data?.url}
-          alt={book?.data?.title}
+          src={book[0]?.url}
+          alt={book[0]?.title}
           className="w-full md:w-64 h-auto object-cover rounded"
         />
         <div className="flex-1">
@@ -72,11 +72,11 @@ export default function BookDetails({ book }: any) {
         <div>
           <p className="font-medium text-gray-700 mb-1">Rate this book:</p>
           <RatingStars
-            rating={book?.data?.averageRating ?? 0}
+            rating={book[0]?.averageRating ?? 0}
             userRating={userRating ?? undefined}
             onRate={(value) => {
               setUserRating(value)
-              handleRate(value, book?._id)
+              handleRate(value, book[0]?._id)
             }}
           />
         </div>
