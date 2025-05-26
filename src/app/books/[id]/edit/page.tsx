@@ -37,7 +37,7 @@ export default function EditBookPage() {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      if (error && error.includes("Invalid token")) {
+      if (error && (error.includes("Invalid token") || error?.includes("Access denied"))) {
         router.push("/admin/login")
       }
     }
