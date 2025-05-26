@@ -153,7 +153,7 @@ export const getBookById = createAsyncThunk<BookResponse, string, { rejectValue:
     const businessId = user?.user?.businessId;
     const token = user?.token;
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/contents/${id}`, {
+      const response = await fetch(`${BASE_URL}/api/v1/contents?id=${id}`, {
         method: "GET",
         headers: {
           "Accept": "application/json",

@@ -26,7 +26,7 @@ npm start
 
 ## Aplication manual
 
-The application is ready for us as soon as it's lauched.
+The application is ready for use as soon as it's lauched.
 
 The home route is for users. On this screen are two buttons, `Login` and `Register`.
 The buttons are for visiting users to register or login to interact with the contents on the application.
@@ -34,8 +34,12 @@ The buttons are for visiting users to register or login to interact with the con
 For the business account, since this is not a real world application, things are kept simple for accessibility purpose.
 
 You have to create an account as a business so as to have a personalized dashboard. 
-To create an account, visit `http://18.130.240.185/register` from the home route
-To log in, visit `http://18.130.240.185/admin/login`
+To create an account, visit  or `http://localhost:3000/register` from the home route
+To log in, visit `http://localhost:3000/admin/login`
+
+## Live Application URI
+
+`http://18.130.240.185/`
 
 
 To build the docker container follow the commands below:
