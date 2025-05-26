@@ -11,10 +11,11 @@ import { Button } from '@/components/ui/button'
 import { authUser } from '@/lib/utils'
 import { getBooks } from '@/store/bookSlice'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
+import { useEvent } from 'expo'
 
 export default function BooksPage() {
   const dispatch = useAppDispatch()
-  const { books, loading } = useAppSelector((state: RootState) => state.book)
+  const { books, loading, error } = useAppSelector((state: RootState) => state.book)
   const router = useRouter();
   const loggedInUser = authUser()?.user;
 
@@ -25,6 +26,12 @@ export default function BooksPage() {
       dispatch(getBooks());
     }
   }, []);
+
+  useEffect(() => {
+    if (error && error.includes("Invalid token")) {
+      router.push("/login")
+    }
+  }, [ error ]);
 
   return (
     <div className="p-6">

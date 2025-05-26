@@ -12,7 +12,6 @@ import { logInteraction } from '@/store/recommendationSlice';
 import LoadingSpinner from '../common/Spinner';
 
 export default function BookDetails({ book }: any) {
-  console.log(book)
   const { deleteSuccess, deleteLoading } = useAppSelector((state: RootState) => state.book);
   const dispatch = useAppDispatch();
   const [userRating, setUserRating] = useState<number | null>(null);
@@ -37,7 +36,7 @@ export default function BookDetails({ book }: any) {
   }
 
   useEffect(() => {
-    dispatch(logInteraction({ contentId: book?._id, interactionType: "view" }))
+    dispatch(logInteraction({ contentId: book[0]?._id, interactionType: "view" }))
   }, [])
 
   const handleDelete = (id: string) => {

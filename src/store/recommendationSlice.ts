@@ -26,7 +26,6 @@ const recommendationSlice = createSlice({
         state.loading = true;
       })
       .addCase(getRecommendations.fulfilled, (state, action) => {
-        console.log(action)
         if (action.payload.success) {
           state.loading = false;
           state.success = true;

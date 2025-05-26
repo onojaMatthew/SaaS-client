@@ -25,6 +25,7 @@ const loggedInUser: any = authUser();
   useEffect(() => {
     if (!loggedInUser?.user) {
       router.push("/admin/login");
+      localStorage.removeItem("token");
     }
     dispatch(getUserUploadedBooks());
   }, []);
@@ -32,6 +33,9 @@ const loggedInUser: any = authUser();
   useEffect(() => {
     if (error) {
       toast.error(error);
+      if (error && error.includes("Invalid token")) {
+        router.push("/admin/login")
+      }
     }
   }, [ error ])
 
@@ -54,7 +58,7 @@ const loggedInUser: any = authUser();
             <p className="text-sm text-gray-700 mb-4">
               Add books to your library and improve your recommendations.
             </p>
-            <Link href="/books/upload">
+            <Link href={`/dashboard/${loggedInUser?.user?.slug}/upload`}>
               <Button variant="primary">Upload Book</Button>
             </Link>
           </CardContent>
@@ -73,7 +77,7 @@ const loggedInUser: any = authUser();
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {books.map((book: Book) => (
-                <Link key={book._id} href={`/books/${book._id}`}>
+                <Link key={book._id} href={`/dashboard/${loggedInUser?.user?.slug}/books/${book._id}`}>
                   <BookCard key={book._id} book={book} />
                 </Link>
               ))}

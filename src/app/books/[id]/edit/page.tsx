@@ -37,6 +37,9 @@ export default function EditBookPage() {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      if (error && error.includes("Invalid token")) {
+        router.push("/admin/login")
+      }
     }
   }, [ error ])
   if (loading || !book) return <div className="p-6"><p>Loading...</p></div>

@@ -14,7 +14,7 @@ export default function UploadBookPage() {
   const dispatch = useAppDispatch();
   const { book, loading, error } = useAppSelector((state: RootState) => state.book)
   const router = useRouter()
-  
+  const user = authUser()?.user;
 
   const handleUpload = async (formData: BookPayload) => {
     dispatch(uploadBook(formData));
@@ -23,6 +23,9 @@ export default function UploadBookPage() {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      if (error && error.includes("Invalid token")) {
+        router.push("/admin/login")
+      }
     }
   }, [ error ])
 

@@ -38,7 +38,6 @@ const bookSlice = createSlice({
         state.loading = true;
       })
       .addCase(getBookById.fulfilled, (state, action) => {
-        console.log(action)
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
@@ -202,7 +201,6 @@ export const uploadBook = createAsyncThunk<BookResponse, BookPayload, { rejectVa
     const businessId = user?.user?.businessId;
     const token = user?.token;
     data["businessId"] = businessId
-    console.log(token, " the token")
     try {
       const response = await fetch(`${BASE_URL}/api/v1/contents/`, {
         method: "POST",

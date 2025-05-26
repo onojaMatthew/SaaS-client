@@ -26,7 +26,6 @@ const initialState: InitialState = {
 const saveToken = (token: object) => {
   if (typeof window !== 'undefined') {
     // safe to use browser features
-    console.log(token, " the response from the server")
     localStorage.setItem('token', JSON.stringify(token));
   }
  
@@ -44,7 +43,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(loginBusiness.fulfilled, (state, action) => {
-        console.log(action)
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
@@ -84,7 +82,6 @@ const authSlice = createSlice({
         
       })
       .addCase(loginReader.fulfilled, (state, action) => {
-        console.log(action, " in the reader ful")
         if (action.payload.success) {
           state.loading = false;
           state.success = true;
@@ -142,7 +139,6 @@ const authSlice = createSlice({
         }
       })
       .addCase(registerBusiness.rejected, (state, action) => {
-        console.log(action, " action rejected")
         state.loading = false;
         state.success = false;
         state.error = action.error.message!
@@ -183,7 +179,6 @@ export const registerBusiness = createAsyncThunk<AuthResponse, RegisterCredentia
        
       return resp;
     } catch (error: any) {
-      console.log('Registration failed');
       return rejectWithValue(error.message || 'Login failed');
     }
   }
@@ -206,7 +201,6 @@ export const loginBusiness = createAsyncThunk<AuthResponse, LoginCredentials, { 
       });
 
       const resp: AuthResponse = await response.json();
-      console.log(resp, " the resp")
      
       return resp;
     } catch (error: any) {
