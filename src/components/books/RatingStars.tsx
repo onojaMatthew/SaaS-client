@@ -26,7 +26,6 @@ export const RatingStars = ({
   const handleClick = (value: number) => {
     console.log(value, " inside RatingStars")
     if (interactive && onRate) {
-      console.log(interactive, onRate, " interactive and onRate")
       setTempRating(value)
       onRate(value)
     }
