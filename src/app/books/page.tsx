@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { authUser } from '@/lib/utils'
 import { getBooks } from '@/store/bookSlice'
 import { RootState, useAppDispatch, useAppSelector } from '@/types/storeTypes'
-import { useEvent } from 'expo'
 
 export default function BooksPage() {
   const dispatch = useAppDispatch()
