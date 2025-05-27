@@ -28,7 +28,7 @@ export default function BooksPage() {
 
   useEffect(() => {
     if (error && (error.includes("Invalid token") || error?.includes("Access denied"))) {
-      router.push("/login")
+      router.push("/login");
     }
   }, [ error ]);
 

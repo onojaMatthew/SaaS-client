@@ -150,9 +150,7 @@ export const getBookById = createAsyncThunk<BookResponse, string, { rejectValue:
   'book/getBookById',
   async (id, { rejectWithValue }) => {
     const user = authUser();
-    const businessId = user?.user?.businessId;
     const token = user?.token;
-    console.log(token)
     try {
       const response = await fetch(`${BASE_URL}/api/v1/contents?id=${id}`, {
         method: "GET",
@@ -227,10 +225,9 @@ export const rateBook = createAsyncThunk<BookResponse, any, { rejectValue: strin
   'book/rateBook',
   async (data, { rejectWithValue }) => {
     const user = authUser();
-    const businessId = user?.user?.businessId;
     const token = user?.token;
     try {
-      const response = await fetch(`${BASE_URL}/contents/rate?id=${data.id}`, {
+      const response = await fetch(`${BASE_URL}/api/v1/contents/rate?contentId=${data.id}`, {
         method: "POST",
         headers: {
           "Accept": "application/json",
